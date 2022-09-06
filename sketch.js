@@ -16,6 +16,13 @@ var navioSpriteData, navioSpriteSheet;
 var brokenAnimation = [];
 var brokenSpriteData, brokenSpriteSheet;
 
+var bolaAnimation = [];
+var bolaSpriteData, bolaSpriteSheet;
+
+var isGameOver = false;
+
+var bgSound, waterSound, piraterisoSound, canonSound;
+
 
 function preload() {
   bgImg = loadImage("./assets/background.gif");
@@ -28,6 +35,13 @@ function preload() {
   //carregar os dados e as imagens do navio quebrando
   brokenSpriteData=loadJSON("./assets/boat/brokenBoat.json")
   brokenSpriteSheet=loadImage("./assets/boat/brokenBoat.png")
+
+  //carregar os dados e as imagens do navio quebrando
+  bolaSpriteData=loadJSON("./assets/waterSplash/waterSplash.json")
+  bolaSpriteSheet=loadImage("./assets/waterSplash/waterSplash.png")
+
+  //carregar os sons do jogo
+  
 }
 
 function setup() {
@@ -58,8 +72,15 @@ function setup() {
 var brokenframes= brokenSpriteData.frames;
 for(var i=0;i<brokenframes.length;i=i+1){
   var pos=brokenframes[i].position;
-  var img=brokenSpriteSheet.get(pos.x,pos.y,pos.w,pos.h)
-  brokenAnimation.push(img)
+  var img=brokenSpriteSheet.get(pos.x,pos.y,pos.w,pos.h);
+  brokenAnimation.push(img);
+}
+
+var bolaframes= bolaSpriteData.frames;
+for(var i=0;i<bolaframes.length;i=i+1){
+  var pos=bolaframes[i].position;
+  var img=bolaSpriteSheet.get(pos.x,pos.y,pos.w,pos.h);
+  bolaAnimation.push(img);
 }
 }
 
@@ -124,6 +145,7 @@ function keyReleased() {
 function showballs(ball, i) {
   if (ball) {
     ball.display();
+    ball.animate();
     if(ball.body.position.x>=width || ball.body.position.y>= height-80){
       ball.remove(i)
     }
@@ -152,6 +174,13 @@ function showNavio() {
 
         grupodenavios[i].display();
         grupodenavios[i].animate();
+
+        //ver se o navio collide com a torre, fim de jogo
+        var collision = Matter.SAT.collides(torre, grupodenavios[i].body);
+        if(collision.collided){
+          isGameOver = true;
+          gameOver();
+        }
       } 
     }
   } else {
@@ -160,3 +189,17 @@ function showNavio() {
   }
 }
 
+function gameOver(){
+  swal({
+    title: `FIM DE JOGO!!`,
+    text: "Obrigado por jogar",
+    imageUrl: "./assets/boat.png",
+    imageSize: "150x150",
+    confirmButtonText: "Jogar novamente"
+  },
+  function(isConfirm){
+    if(isConfirm){
+      location.reload();
+    }
+  })
+}

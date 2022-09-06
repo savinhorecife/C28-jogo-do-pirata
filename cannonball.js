@@ -4,12 +4,22 @@ class CannonBall {
       isStatic: true
     };
     this.r = 30;
+    this.isSink = false;
+    this.speed = 0.05;
     this.body = Bodies.circle(x, y, this.r, options);
     this.image = loadImage("./assets/cannonball.png");
+    this.animation = [this.image];
     World.add(world, this.body);
   }
 
+  animate(){
+    this.speed = this.speed+0.05;
+  }
+
   remove(i) {
+    this.animation = bolaAnimation;
+    this.isSink = true;
+    this.r = 150;
     Matter.Body.setVelocity(this.body, {x:0,y:0});
     
     setTimeout(() => {
@@ -29,11 +39,13 @@ class CannonBall {
   }
 
   display() {
+    var index = floor(this.speed%this.animation.length);
+
     push();
     translate(this.body.position.x, this.body.position.y);
     rotate(this.body.angle);
     imageMode(CENTER);
-    image(this.image, 0, 0, this.r, this.r);
+    image(this.animation[index], 0, 0, this.r, this.r);
     pop();
   }
 }
