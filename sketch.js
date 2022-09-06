@@ -26,6 +26,8 @@ function preload() {
   navioSpriteSheet = loadImage("./assets/boat/boat.png");
 
   //carregar os dados e as imagens do navio quebrando
+  brokenSpriteData=loadJSON("./assets/boat/brokenBoat.json")
+  brokenSpriteSheet=loadImage("./assets/boat/brokenBoat.png")
 }
 
 function setup() {
@@ -53,7 +55,12 @@ function setup() {
   }
 
   //acessando as imagens do navio quabrando
-
+var brokenframes= brokenSpriteData.frames;
+for(var i=0;i<brokenframes.length;i=i+1){
+  var pos=brokenframes[i].position;
+  var img=brokenSpriteSheet.get(pos.x,pos.y,pos.w,pos.h)
+  brokenAnimation.push(img)
+}
 }
 
 function draw() {

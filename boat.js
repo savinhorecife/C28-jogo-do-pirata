@@ -8,11 +8,18 @@ class Boat {
     this.animation = boatAnimation;
     this.speed = 0.05;
     this.image = loadImage("./assets/boat.png");
+    this.isbroken=false;
 
     World.add(world, this.body);
   }
 
   remove(i) {
+    this.animation=brokenAnimation;
+    this.speed=0.05;
+    this.width=300;
+    this.height=300;
+    this.isbroken=true
+  
     setTimeout(() => {
       Matter.World.remove(world, grupodenavios[i].body);
       delete grupodenavios[i];
